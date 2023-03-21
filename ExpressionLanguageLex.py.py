@@ -71,7 +71,7 @@ def t_NUMBER(t):
     return t
 
 def t_newline(t):
-    r'n+'
+    r'\n+'
     t.lexer.lineno += len(t.value)
 
 t_ignore = ' \t'
