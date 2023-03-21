@@ -23,10 +23,18 @@ reservadas = {
     
 
 }
+def space_counter(token):
+    spaces = 0
+    for c in token.value:
+        if c == ' ':
+            spaces += 1
+        elif c == '\t':
+            spaces += 8 - (spaces % 8)
+    return spaces
 
-tokens = ['PASS','ID', 'NUMBER', 'SOMA', 'VEZES', 'IGUALAT', 'DIVIDIR', 'SUBTRAIR', 'LPAREN', 'RPAREN', 
+tokens = ['PASS','ID', 'NUMBER_INT', 'NUMBER_FLOAT', 'SOMA', 'VEZES', 'IGUALAT', 'DIVIDIR', 'SUBTRAIR', 'LPAREN', 'RPAREN', 
           'LCHAV', 'RCHAV', 'POT', 'COMMA', 'IGUAL', 'DIFERENTE', 'MAIOR', 'MENOR', 'MAIORIGUAL', 'MENORIGUAL', 
-          'ANDVETOR', 'AND', 'ORVETOR', 'OR', 'NOTLOGICO', 'XOR', 'SEQUENCIAL', 'MODULO', 'PV'
+          'ANDVETOR', 'AND', 'ORVETOR', 'OR', 'NOTLOGICO', 'XOR', 'SEQUENCIAL', 'MODULO', 'PV', 'LINHA', 'IDENT', 'DEDENT',
           ] + list(reservadas.values())
 
 t_SOMA = r'\+'
@@ -56,6 +64,59 @@ t_XOR = r'XOR'
 t_SEQUENCIAL = r':'
 t_MODULO = r'%%'
 t_PV =r';'
+t_LINHA = '[a-zA-Z][a-zA-Z \t]+'
+
+stack = [0]
+states = (('idstate', 'exclusive'),
+          ('dedstate', 'exclusive'),)
+
+def t_breakline(t):
+    r'\n+'                                 #recognizes one or more break lines
+    t.lexer.lineno += len(t.value) 
+    t.lexer.begin('idstate')
+
+def t_idstate_blankline(t):
+    r'([ \t]+)\n'                           #recognizes a blank line
+    # print('t_idstate_blankline')
+    pass
+
+def t_idstate_linewithcode(t):
+    '([ \t]+) | ([a-zA-Z])'                 #recognizes white spaces and tabs or a letter
+    # print('t_idstate_linewithcode')
+    n_spaces = space_counter(t)
+    t.lexer.begin('INITIAL')
+    if n_spaces < stack[-1]:
+        t.lexer.skip(-len(t.value))
+        stack.pop()
+        t.type='DEDENT'
+        t.lexer.begin('dedstate')
+        return t
+    elif n_spaces > stack[-1]:
+        stack.append(n_spaces)
+        t.type='IDENT'
+        return t
+    elif n_spaces == 0:
+        t.lexer.skip(-1)
+
+def t_dedstate_linewithdedent(t):
+    '([ \t]+) | ([a-zA-Z])'                 #recognizes white spaces and tabs or a letter
+    n_spaces = space_counter(t)
+    if n_spaces < stack[-1]:
+        t.lexer.skip(-len(t.value))
+        stack.pop()
+        t.type='DEDENT'
+        return t
+    elif n_spaces >= stack[-1]:  
+        t.lexer.begin('INITIAL')
+        if n_spaces > stack[-1]:
+            print('Erro de dedentação --->', n_spaces)
+        elif n_spaces == 0:                  # If the element starts with a letter
+            t.lexer.skip(-1)
+
+def t_error(t):
+    print("ERROR in INITIAL state")
+    print(t.value)
+    t.lexer.skip(1)
 
 # Expressão regular para identificar comentários
 t_ignore_COMMENT = r'\#.*'
@@ -65,7 +126,13 @@ def t_ID(t):
     t.ype = reservadas.get(t.value, 'ID')
     return t
 
-def t_NUMBER(t):
+
+def t_NUMBER_FLOAT(t):
+    r'\d+\.\d+'
+    t.value = float(t.value)
+    return t
+
+def t_NUMBER_INT(t):
     r'\d+'
     t.value = int(t.value)
     return t
@@ -74,20 +141,20 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-t_ignore = ' \t'
+#t_ignore = ' \t'
+
+# def t_error(t):
+#     print("Illegal character '%s'" % t.value[0])
+#     t.lexer.skip(1)
 
 
-def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
 
 
 # Build the lexer
 lexer = lex.lex()
  
-lex.input("""# Uma funcao que realiza a soma de dois numeros
-def soma(a,b): # a função espera receber dois argumentos
-    return a + b # retorna a soma dos dois numeros""")
+lex.input("""def soma(a,b):
+    return a + b""")
 
 for token in lexer:
   print(token.type, token.value)
