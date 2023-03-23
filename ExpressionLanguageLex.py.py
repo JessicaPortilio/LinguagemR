@@ -1,5 +1,14 @@
 import ply.lex as lex
 
+def space_counter(token):
+    spaces = 0
+    for c in token.value:
+        if c == ' ':
+            spaces += 1
+        elif c == '\t':
+            spaces += 8 - (spaces % 8)
+    return spaces
+
 reservadas = {
     'if' : 'IF',
     'else' : 'ELSE',
@@ -19,18 +28,10 @@ reservadas = {
     'NA_integer_' : 'NA_INTEGER_',
     'NA_real_' : 'NA_REAL_',
     'NA_complex' : 'NA_COMPLEX',
-    'NA_character_' : 'NA_CHARACTER_',
+    'NA_character_' : 'NA_CHARACTER_'
     
 
 }
-def space_counter(token):
-    spaces = 0
-    for c in token.value:
-        if c == ' ':
-            spaces += 1
-        elif c == '\t':
-            spaces += 8 - (spaces % 8)
-    return spaces
 
 tokens = ['PASS','ID', 'NUMBER_INT', 'NUMBER_FLOAT', 'SOMA', 'VEZES', 'IGUALAT', 'DIVIDIR', 'SUBTRAIR', 'LPAREN', 'RPAREN', 
           'LCHAV', 'RCHAV', 'POT', 'COMMA', 'IGUAL', 'DIFERENTE', 'MAIOR', 'MENOR', 'MAIORIGUAL', 'MENORIGUAL', 
@@ -58,38 +59,44 @@ t_IGUAL = r'=='
 t_ANDVETOR = r'&'
 t_AND = r'&&'
 t_ORVETOR = r'\|'
-t_OR ='\|'
+t_OR = r'\|'
 t_NOTLOGICO = '!'
 t_XOR = r'XOR'
 t_SEQUENCIAL = r':'
 t_MODULO = r'%%'
 t_PV =r';'
-t_LINHA = '[a-zA-Z][a-zA-Z \t]+'
 
 stack = [0]
 states = (('idstate', 'exclusive'),
           ('dedstate', 'exclusive'),)
 
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*?[a-zA-Z][a-zA-Z \t]+'
+    t.type = reservadas.get(t.value, 'ID')
+    return t
+
+# t_LINHA = '[a-zA-Z][a-zA-Z \t]+'
+
 def t_breakline(t):
-    r'\n+'                                 #recognizes one or more break lines
+    r'\n+'                                 #reconhece uma ou mais linhas de quebra
     t.lexer.lineno += len(t.value) 
     t.lexer.begin('idstate')
 
 def t_idstate_blankline(t):
-    r'([ \t]+)\n'                           #recognizes a blank line
+    r'([ \t]+)\n'                           #reconhece uma linha em branco
     # print('t_idstate_blankline')
     pass
 
 def t_idstate_linewithcode(t):
-    '([ \t]+) | ([a-zA-Z])'                 #recognizes white spaces and tabs or a letter
-    # print('t_idstate_linewithcode')
+    '([ \t]+) | ([a-zA-Z])'                 #reconhece espaços em branco e tabulações ou uma letra
     n_spaces = space_counter(t)
     t.lexer.begin('INITIAL')
     if n_spaces < stack[-1]:
         t.lexer.skip(-len(t.value))
-        stack.pop()
-        t.type='DEDENT'
-        t.lexer.begin('dedstate')
+        while n_spaces < stack[-1]:
+            stack.pop()
+            t.type='DEDENT'
+            t.lexer.begin('dedstate')
         return t
     elif n_spaces > stack[-1]:
         stack.append(n_spaces)
@@ -103,10 +110,12 @@ def t_dedstate_linewithdedent(t):
     n_spaces = space_counter(t)
     if n_spaces < stack[-1]:
         t.lexer.skip(-len(t.value))
-        stack.pop()
-        t.type='DEDENT'
+        while n_spaces < stack[-1]:
+            stack.pop()
+            t.type='DEDENT'
+        t.lexer.begin('dedstate')
         return t
-    elif n_spaces >= stack[-1]:  
+    elif n_spaces > stack[-1]:  
         t.lexer.begin('INITIAL')
         if n_spaces > stack[-1]:
             print('Erro de dedentação --->', n_spaces)
@@ -118,30 +127,37 @@ def t_error(t):
     print(t.value)
     t.lexer.skip(1)
 
-# Expressão regular para identificar comentários
-t_ignore_COMMENT = r'\#.*'
+def t_idstate_error(t):
+    print("ERROR in idstate state")
+    t.lexer.skip(1)
 
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.ype = reservadas.get(t.value, 'ID')
-    return t
+def t_dedstate_error(t):
+    print("ERROR in dedstate state")
+    t.lexer.skip(1)
 
 
-def t_NUMBER_FLOAT(t):
-    r'\d+\.\d+'
-    t.value = float(t.value)
-    return t
+# # Expressão regular para identificar comentários
+# t_ignore_COMMENT = r'\#.*'
 
-def t_NUMBER_INT(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
 
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
 
-#t_ignore = ' \t'
+
+# def t_NUMBER_FLOAT(t):
+#     r'\d+\.\d+'
+#     t.value = float(t.value)
+#     return t
+
+# def t_NUMBER_INT(t):
+#     r'\d+'
+#     t.value = int(t.value)
+#     return t
+
+
+# def t_newline(t):
+#     r'\n+'
+#     t.lexer.lineno += len(t.value)
+
+# t_ignore = ' \t'
 
 # def t_error(t):
 #     print("Illegal character '%s'" % t.value[0])
@@ -151,11 +167,15 @@ def t_newline(t):
 
 
 # Build the lexer
-lexer = lex.lex()
- 
-lex.input("""def soma(a,b):
-    return a + b""")
+lex.lex()
+programa = """
+def qualquer coisa
+    if qualquer coisa
+        fez o que tinha que fazer
+return qualquer coisa
+"""
+lex.input(programa)
 
-for token in lexer:
-  print(token.type, token.value)
 
+for token in lex.lexer:
+    print('[', token.type, ',', token.value)
