@@ -136,26 +136,26 @@ def t_dedstate_error(t):
     t.lexer.skip(1)
 
 
-# # Expressão regular para identificar comentários
-# t_ignore_COMMENT = r'\#.*'
+# Expressão regular para identificar comentários
+t_ignore_COMMENT = r'\#.*'
 
 
 
 
-# def t_NUMBER_FLOAT(t):
-#     r'\d+\.\d+'
-#     t.value = float(t.value)
-#     return t
+def t_NUMBER_FLOAT(t):
+    r'\d+\.\d+'
+    t.value = float(t.value)
+    return t
 
-# def t_NUMBER_INT(t):
-#     r'\d+'
-#     t.value = int(t.value)
-#     return t
+def t_NUMBER_INT(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
 
 
-# def t_newline(t):
-#     r'\n+'
-#     t.lexer.lineno += len(t.value)
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 # t_ignore = ' \t'
 
@@ -168,7 +168,7 @@ def t_dedstate_error(t):
 
 # Build the lexer
 lex.lex()
-programa = """
+programa = """#Comentario
 def qualquer coisa
     if qualquer coisa
         fez o que tinha que fazer
