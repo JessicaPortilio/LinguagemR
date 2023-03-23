@@ -48,7 +48,7 @@ t_RPAREN = r'\)'
 t_LCHAV = r'{'
 t_RCHAV = r'}'
 t_POT = r'\^'
-t_COMMA = r','
+t_COMMA = r'\,'
 t_PASS = r'\.\.\.'
 t_DIFERENTE = r'!='
 t_MAIOR =r'>'
@@ -62,7 +62,7 @@ t_ORVETOR = r'\|'
 t_OR = r'\|'
 t_NOTLOGICO = '!'
 t_XOR = r'XOR'
-t_SEQUENCIAL = r':'
+t_SEQUENCIAL = r'\:'
 t_MODULO = r'%%'
 t_PV =r';'
 
@@ -141,7 +141,6 @@ t_ignore_COMMENT = r'\#.*'
 
 
 
-
 def t_NUMBER_FLOAT(t):
     r'\d+\.\d+'
     t.value = float(t.value)
@@ -169,9 +168,9 @@ def t_newline(t):
 # Build the lexer
 lex.lex()
 programa = """#Comentario
-def qualquer coisa
-    if qualquer coisa
-        fez o que tinha que fazer
+def soma():
+    if True:
+        print(soma)
 return qualquer coisa
 """
 lex.input(programa)
