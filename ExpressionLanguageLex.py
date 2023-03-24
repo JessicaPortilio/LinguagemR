@@ -56,11 +56,11 @@ t_MENOR =r'<'
 t_MAIORIGUAL = r'>='
 t_MENORIGUAL = r'<='
 t_IGUAL = r'=='
-t_ANDVETOR = r'&'
-t_AND = r'&&'
-t_ORVETOR = r'\|'
+t_ANDVETOR = r'\&'
+t_AND = r'\&\&'
+t_ORVETOR = r'\|\|'
 t_OR = r'\|'
-t_NOTLOGICO = '!'
+t_NOTLOGICO = r'!'
 t_XOR = r'XOR'
 t_SEQUENCIAL = r'\:'
 t_MODULO = r'%%'
@@ -71,7 +71,7 @@ states = (('idstate', 'exclusive'),
           ('dedstate', 'exclusive'),)
 
 def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*?[a-zA-Z][a-zA-Z \t]+'
+    r'[a-zA-Z\t][a-zA-Z0-9_\. \t]*'
     t.type = reservadas.get(t.value, 'ID')
     return t
 
@@ -168,6 +168,7 @@ def t_newline(t):
 # Build the lexer
 lex.lex()
 programa = """#Comentario
+
 def soma():
     if True:
         print(soma)
