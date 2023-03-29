@@ -1,4 +1,5 @@
 <h1 align="center"> LinguagemR </h1>
+
 R é uma linguagem de programação e ambiente de software livre
 e código aberto (open source). R é uma linguagem de programação 
 estatística e gráfica que vem se especializando na manipulação, análise
