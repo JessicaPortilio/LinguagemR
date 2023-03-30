@@ -11,4 +11,7 @@ ferramentas para essa finalidade. <br>
 [LexicoPLY](https://github.com/JessicaPortilio/LinguagemR/blob/main/ExpressionLanguageLex.py.py)<br>
 ✔Atividade 3. Elaboração da Documentação Sintática e Exemplos de Código. <br>
 [Documentação Sintática](https://github.com/JessicaPortilio/LinguagemR/blob/main/documentos/Documenta%C3%A7%C3%A3o%20Sint%C3%A1tica%20da%20Linguagem%20R.pdf)<br>
+✔Atividade 4. Elaboração da Gramática Livre de Contexto e implementação no PLY. <br>
+[GLC](https://github.com/JessicaPortilio/LinguagemR/blob/main/documentos/GLC%20da%20Linguagem%20de%20Programa%C3%A7%C3%A3o%20R.pdf)<br>
+[Implementação no PLY](https://github.com/JessicaPortilio/LinguagemR/blob/main/ExpressionLanguageParser.py)<br>
 <br>
