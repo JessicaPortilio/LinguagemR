@@ -57,21 +57,49 @@ def p_stms(p):
             | stm stms'''
     pass
 
-def p_stm(p):
-    ''' stm :  exp PV
-             | WHILE LPAREN exp RPAREN body
-             | RETURN exp PV
-             | IF LPAREN exp RPAREN body ELSE body
-             | FOR LPAREN ID IN EXP RPAREN body
-             | REPEAT body UNTIL LPAREN exp RPAREN PV
-             | BREAK PV
-             | NEXT PV ''' 
+def p_stm_exp(p):
+    ''' stm :  exp PV ''' 
+    pass
     
-    ''' stm :  SWITCH LPAREN exp COMMA  CASES RPAREN
-    CASES : ID IGUAL body IGUALAT LCHAV body RCHAV COMMA CASES
-            | ID IGUALAT LCHAV body RCHAV'''
+def p_stm_while(p):
+    ''' stm : WHILE LPAREN exp RPAREN body ''' 
     pass
 
+def p_stm_return(p):
+    ''' stm : RETURN exp PV ''' 
+    pass
+
+def p_stm_for(p):
+    ''' stm : FOR LPAREN ID IN EXP RPAREN body ''' 
+    pass
+
+def p_stm_repeat(p):
+    ''' stm : REPEAT body UNTIL LPAREN exp RPAREN PV ''' 
+    pass
+
+def p_stm_break(p):
+    ''' stm : BREAK PV ''' 
+    pass
+
+def p_stm_next(p):
+    ''' stm : NEXT PV ''' 
+    pass
+
+def p_stm_witch(p):
+    ''' stm :  SWITCH LPAREN exp COMMA  cases RPAREN '''
+    pass
+
+def p_cases(p):
+    '''cases : exp IGUAL body
+            | exp IGUAL body cases
+            | exp IGUAL stm
+            | exp IGUAL stm cases'''
+    pass
+
+
+def p_stm_if_else(p):
+    ''' stm : IF LPAREN exp RPAREN body ELSE body ''' 
+    pass
 def p_exp_assign(p):
     ''' exp :    exp IGUAL exp1
               | exp1'''
