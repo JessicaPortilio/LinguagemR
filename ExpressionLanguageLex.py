@@ -28,7 +28,8 @@ reservadas = {
     'NA_integer_' : 'NA_INTEGER_',
     'NA_real_' : 'NA_REAL_',
     'NA_complex' : 'NA_COMPLEX',
-    'NA_character_' : 'NA_CHARACTER_'
+    'NA_character_' : 'NA_CHARACTER_',
+    'call' : 'call'
     
 
 }
