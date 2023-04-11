@@ -73,11 +73,11 @@ def p_stm_return(p):
     pass
 
 def p_stm_for(p):
-    ''' stm : FOR LPAREN ID IN EXP RPAREN body ''' 
+    ''' stm : FOR LPAREN ID IN exp RPAREN body ''' 
     pass
 
 def p_stm_repeat(p):
-    ''' stm : REPEAT body UNTIL LPAREN exp RPAREN PV ''' 
+    ''' stm : REPEAT body WHILE LPAREN exp RPAREN PV ''' 
     pass
 
 def p_stm_break(p):
@@ -114,8 +114,7 @@ def p_exp1_soma(p):
     pass
 
 def p_exp1_menos(p):
-    '''exp1 : exp1 SUBTRAIR exp2
-         | exp2'''
+    '''exp1 : exp1 SUBTRAIR exp2'''
     pass
 
 def p_exp2_vezes(p):
@@ -124,8 +123,7 @@ def p_exp2_vezes(p):
    pass
 
 def p_exp2_dividir(p):
-   '''exp2 : exp2 DIVIDIR exp3
-           | exp3'''
+   '''exp2 : exp2 DIVIDIR exp3 '''
    pass
 
 def p_exp3_pot(p):
@@ -156,3 +154,4 @@ def p_error(p):
     print("Syntax error in input!")
 
 parser = yacc.yacc() 
+

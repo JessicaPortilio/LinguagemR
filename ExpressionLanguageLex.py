@@ -29,8 +29,10 @@ reservadas = {
     'NA_real_' : 'NA_REAL_',
     'NA_complex' : 'NA_COMPLEX',
     'NA_character_' : 'NA_CHARACTER_',
-    'call' : 'call',
+    'call' : 'CALL',
     'cat' : 'CAT',
+    'switch' : 'SWITCH',
+    'return' : 'RETURN',
     
 
 }
@@ -168,7 +170,7 @@ def t_newline(t):
 
 
 # Build the lexer
-lex.lex()
+lexer = lex.lex()
 programa = """#Comentario
 
 def soma():
@@ -176,8 +178,8 @@ def soma():
         print(soma)
 return qualquer coisa
 """
-lex.input(programa)
+lexer.input(programa)
 
 
-for token in lex.lexer:
-    print('[', token.type, ',', token.value)
+# for token in lex.lexer:
+#     print('[', token.type, ',', token.value)
