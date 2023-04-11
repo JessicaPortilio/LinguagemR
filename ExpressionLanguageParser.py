@@ -14,8 +14,10 @@
 #break ";" |
 #next ";"
 #stm → SWITCH "(" exp "," cases ")"
-#cases  → ID "=" "{" stms "}" "," cases | ID "=" "{" stms "}" 
-
+#cases  → "(" exp ")" "=" "{" stms "}"
+#       | "(" exp ")" "=" "{" stms "}" "(" cases ")"
+#       | "(" exp ")" "=" "{" stms "}"
+#       | "(" exp ")" "=" "{" stms "}" "(" cases ")"
 # call → id ( params )
 # exp → exp + exp |exp - exp | exp * exp |exp / exp | exp ^ exp | call | assign | num | id
 # call → id (params) | id ( )
@@ -23,6 +25,7 @@
 # assign → id = exp
 
 import ply.yacc as yacc
+import ply.lex as lex
 from ExpressionLanguageLex import *
 
 
@@ -151,3 +154,5 @@ def p_params_ids(p):
 
 def p_error(p):
     print("Syntax error in input!")
+
+parser = yacc.yacc() 
