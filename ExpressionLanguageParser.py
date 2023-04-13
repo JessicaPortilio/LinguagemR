@@ -59,6 +59,9 @@ def p_stms(p):
     ''' stms : stm
             | stm stms'''
     pass
+def p_bodyORstm(p):
+    '''bodyORstm : body 
+                |  stm'''
 
 def p_stm_exp(p):
     ''' stm :  exp PV ''' 
@@ -89,19 +92,24 @@ def p_stm_next(p):
     pass
 
 def p_stm_witch(p):
-    ''' stm :  SWITCH LPAREN exp COMMA  cases RPAREN '''
+    ''' stm :  SWITCH LPAREN exp COMMA  cases RPAREN 
+            |  SWITCH LPAREN exp COMMA  casesnum RPAREN '''
     pass
 
 def p_cases(p):
-    '''cases : exp IGUAL body
-            | exp IGUAL body cases
-            | exp IGUAL stm
-            | exp IGUAL stm cases'''
+    '''cases : exp IGUALAT exp
+            | exp IGUALAT exp COMMA cases'''
+    pass
+def p_cases_num(p):
+    '''casesnum : exp
+            | exp COMMA cases'''
     pass
 
-
+def p_stm_if(p):
+    ''' stm : IF LPAREN exp RPAREN bodyORstm ''' 
+    pass
 def p_stm_if_else(p):
-    ''' stm : IF LPAREN exp RPAREN body ELSE body ''' 
+    ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE bodyORstm''' 
     pass
 def p_exp_assign(p):
     ''' exp :    exp IGUAL exp1
@@ -131,8 +139,64 @@ def p_exp3_pot(p):
             | exp4'''
     pass
 
-def p_exp4_call(p):
-    '''exp4 : call
+def p_exp4_maior(p):
+    '''exp4 : exp4 MAIOR exp5
+        | exp5'''
+    pass
+
+def p_exp5_menor(p):
+    '''exp5 : exp5 MENOR exp6
+        | exp6'''
+    pass
+
+def p_exp6_maiorigual(p):
+    '''exp6 : exp6 MAIORIGUAL exp7
+        | exp7'''
+    pass
+
+def p_exp7_menorigual(p):
+    '''exp7 : exp7 MENORIGUAL exp8
+        | exp8'''
+    pass
+
+def p_exp8_diferente(p):
+    '''exp8 : exp8 DIFERENTE exp9
+        | exp9'''
+    pass
+
+# t_ANDVETOR = r'\&'
+def p_exp9_andvetor(p):
+    '''exp9 : exp9 ANDVETOR exp10
+        | exp10'''
+    pass
+# t_AND = r'\&\&'
+def p_exp10_and(p):
+    '''exp10 : exp10 AND exp11
+        | exp11'''
+    pass
+# t_ORVETOR = r'\|\|'
+def p_exp11_orvetor(p):
+    '''exp11 : exp11 ORVETOR exp12
+        | exp12'''
+    pass
+# t_OR = r'\|'
+def p_exp12_or(p):
+    '''exp12 : exp12 OR exp13
+        | exp13'''
+    pass
+# t_NOTLOGICO = r'!'
+def p_exp13_notlogico(p):
+    '''exp13 : exp13 NOTLOGICO exp14
+        | exp14'''
+    pass
+# t_XOR = r'XOR'
+def p_exp14_xor(p):
+    '''exp14 : exp14 XOR exp15
+        | exp15'''
+    pass
+
+def p_exp15_call(p):
+    '''exp15 : call
             | NUMBER_INT
             | NUMBER_FLOAT
             | ID
