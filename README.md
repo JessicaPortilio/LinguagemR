@@ -15,4 +15,7 @@ ferramentas para essa finalidade. <br>
 ✔Atividade 4. Elaboração da Gramática Livre de Contexto e implementação no PLY. <br>
 [GLC](https://github.com/JessicaPortilio/LinguagemR/blob/main/documentos/GLC%20da%20Linguagem%20de%20Programa%C3%A7%C3%A3o%20R.pdf)<br>
 [Implementação no PLY](https://github.com/JessicaPortilio/LinguagemR/blob/main/ExpressionLanguageParser.py)<br>
+✔Atividade 5. Elaboração da Sintaxe Abstrata e Visitor Pretty Printer<br>
+[Exemplo Sintaxe Abstrata](https://github.com/JessicaPortilio/LinguagemR/blob/main/SintaxeAbstrata.py)<br>
+[Exemplo Visitor ImprimeCodigo](https://github.com/JessicaPortilio/LinguagemR/blob/main/Visitor.py)<br>
 <br>
