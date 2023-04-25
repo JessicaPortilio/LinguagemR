@@ -2,6 +2,12 @@
 # temos que ajustar para nossa linguagem R
 
 # Temos que perguntar para o professor de onde vem o AbstractVisitor
+# - Ela vem de um arquivo chamado AbstractVisitor na pasta fonte do projeto do professor.
+
+# Creio que ficou faltando aqui e na sintaxe abstrata o operador de comparação ==
+
+
+# Fiquei em duvida em como implementar as declarações dos tipos de variaveis: tipo Int, Float que tá no final da sintaxe abstrata.
 from AbstractVisitor import AbstractVisitor
 # global tab
 tab = 0
@@ -17,6 +23,7 @@ class Visitor(AbstractVisitor):
     def visitFuncDeclConcrete(self, funcDeclConcrete):
         funcDeclConcrete.signature.accept(self)
         funcDeclConcrete.body.accept(self)
+        
 
     def visitSignatureConcrete(self, signatureConcrete):
         print (blank(), signatureConcrete.type, ' ', end='', sep='')
@@ -70,6 +77,7 @@ class Visitor(AbstractVisitor):
         # print("visitAssignExp")
         assignExp.exp1.accept(self)
         print(' = ', end='')
+        #Fiquei na duvida se deveria trocar para <- já que é uma atribuição.
         assignExp.exp2.accept(self)
 
     def visitSomaExp(self, somaExp):
@@ -78,17 +86,80 @@ class Visitor(AbstractVisitor):
         print(' + ', end='')
         somaExp.exp2.accept(self)
 
-    def visitMulExp(self, mulExp):
-        # print("visitMulExp")
-        mulExp.exp1.accept(self)
+    def visitMenosExp(self, menosExp):
+        menosExp.exp1.accept(self)
+        print(' -', end='')
+        menosExp.exp2.accept(self)
+
+    def visitVezesExp(self, VezesExp):
+        VezesExp.exp1.accept(self)
         print(' * ', end='')
-        mulExp.exp2.accept(self)
+        VezesExp.exp2.accept(self)
+
+    def visitDividirExp(self,DividirExp):
+        DividirExp.exp1.accept(self)
+        print(' / ', end='')
+        DividirExp.exp2.accept(self)
 
     def visitPotExp(self, potExp):
-        # print("visitPotExp")
-        potExp.exp1.accept(self)
+        potExp.exp3.accept(self)
         print(' ^ ', end='')
-        potExp.exp2.accept(self)
+        potExp.exp4.accept(self)
+
+    def visitMaiorExp(self, MaiorExp):
+        MaiorExp.exp4.accept(self)
+        print(' > ', end = '')
+        MaiorExp.exp5.accept(self)
+
+    def visitMenorExp(self,MenorExp):
+        MenorExp.exp5.accept(self)
+        print (' < ', end= '')
+        MenorExp.exp6.accept(self)
+
+    def visitMaiorIgualExp(self, MaiorIgualExp):
+        MaiorIgualExp.exp6.accept(self)
+        print(' >= ', end='')
+        MaiorIgualExp.exp7.accept(self)
+
+    def visitMenorIgualExp(self, MenorIgualExp):
+        MenorIgualExp.exp7.accept(self)
+        print(' <= ', end='')
+        MenorIgualExp.exp8.accept(self)
+
+    def visitDiferenteExp(self, DiferenteExp):
+        DiferenteExp.exp8.accept(self)
+        print('!= ',end='')
+        DiferenteExp.exp9.accept(self)
+
+    def visitAndExp(self, AndExp):
+        AndExp.exp1.accept(self)
+        print('&&', end='')
+        AndExp.exp2.accept(self)
+        
+    def visitAndVetorExp(self,AndVetorExp):
+        AndVetorExp.exp9.accept(self)
+        print('&', end='')
+        AndVetorExp.exp10.accept(self)
+
+    def visitOrExp(self, OrExp):
+        OrExp.exp12.accept(self)
+        print(' || ', end='')
+        OrExp.exp13.accept(self)
+
+    def visitOrVetorExp(self,OrVetorExp):
+        OrVetorExp.exp11.accept(self)
+        print(' | ',end='')
+        OrVetorExp.exp12.accept(self)
+
+    def visitXorExp(self, XorExp):
+        XorExp.exp14.accept(self)
+        print(' xor ',end='')
+        XorExp.exp15.accept(self)
+
+    def visitNotExp(self, NotExp):
+        NotExp.exp13.accept(self)
+        print(' ! ',end='')
+        NotExp.exp14.accept(self)
 
     def visitCallExp(self, callExp):
         # print("visitCallExp")
@@ -124,3 +195,5 @@ class Visitor(AbstractVisitor):
     def visitSingleParam(self, singleParam):
         # print("visitSingleParam")
         singleParam.exp.accept(self)
+
+    
