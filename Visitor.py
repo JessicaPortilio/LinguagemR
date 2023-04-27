@@ -161,9 +161,13 @@ class Visitor(AbstractVisitor):
         # print("visitCallExp")
         callExp.call.accept(self)
 
-    def visitNumExp(self, numExp):
-        # print("visitNumExp")
-        print(numExp.num, end='')
+    def visitNumIntExp(self, numIntExp):
+        # print("visivisitNumIntExp")
+        print(numIntExp.numInt, end='')
+    
+    def visitNumFloatExp(self, numFloatExp):
+        # print("visivisitNumFloatExp")
+        print(numFloatExp.numFloat, end='')
 
     def visitIdExp(self, idExp):
         # print("visitIdExp")
