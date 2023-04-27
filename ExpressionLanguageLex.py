@@ -183,3 +183,4 @@ lexer.input(programa)
 
 # for token in lex.lexer:
 #     print('[', token.type, ',', token.value)
+#
