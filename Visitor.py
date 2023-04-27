@@ -76,7 +76,7 @@ class Visitor(AbstractVisitor):
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")
         assignExp.exp1.accept(self)
-        print(' = ', end='')
+        print(' <- ', end='')
         #Fiquei na duvida se deveria trocar para <- já que é uma atribuição.
         assignExp.exp2.accept(self)
 

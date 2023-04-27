@@ -44,7 +44,7 @@ tokens = ['PASS','ID', 'NUMBER_INT', 'NUMBER_FLOAT', 'SOMA', 'VEZES', 'IGUALAT',
 
 t_SOMA = r'\+'
 t_VEZES = r'\*'
-t_IGUALAT = r'='
+t_IGUALAT = r'<-'
 t_DIVIDIR = r'/'
 t_SUBTRAIR = r'-'
 t_LPAREN = r'\('
