@@ -1,11 +1,3 @@
-# Observação não está pronto só copiei o do professor, 
-# temos que ajustar para nossa linguagem R
-
-# Temos que perguntar para o professor de onde vem o AbstractVisitor
-# - Ela vem de um arquivo chamado AbstractVisitor na pasta fonte do projeto do professor.
-
-# Creio que ficou faltando aqui e na sintaxe abstrata o operador de comparação ==
-
 
 # Fiquei em duvida em como implementar as declarações dos tipos de variaveis: tipo Int, Float que tá no final da sintaxe abstrata.
 from AbstractVisitor import AbstractVisitor
@@ -77,7 +69,6 @@ class Visitor(AbstractVisitor):
         # print("visitAssignExp")
         assignExp.exp1.accept(self)
         print(' <- ', end='')
-        #Fiquei na duvida se deveria trocar para <- já que é uma atribuição.
         assignExp.exp2.accept(self)
 
     def visitSomaExp(self, somaExp):
