@@ -412,6 +412,18 @@ class XorExp(Exp):
         self.exp15 = exp15
     def accept(self, visitor):
         return visitor.visitXorExp(self)
+    
+# def p_exp15_igual(p):
+#     '''exp15: exp15 IGUAL exp16
+#         |exp 16'''
+#     pass
+
+class IgualExp(Exp):
+    def init(self, exp15, exp16):
+        self.exp15 = exp15
+        self.exp16 = exp16
+        def accept(self, visitor):
+            return visitor.visitIgualExp(self)
 
 
 # def p_exp15_call(p):
@@ -422,6 +434,7 @@ class XorExp(Exp):
 #             | TRUE
 #             | FALSE'''
 #     pass
+
 
 class CallExp(Exp, Stm):
     def __init__(self, call):

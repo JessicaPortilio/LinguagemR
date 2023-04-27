@@ -106,6 +106,11 @@ class Visitor(AbstractVisitor):
         print(' ^ ', end='')
         potExp.exp4.accept(self)
 
+    def visitIgualExp(self, IgualExp):
+        IgualExp.exp15.accept(self)
+        print(' == ', end='')
+        IgualExp.exp16.accept(self)
+
     def visitMaiorExp(self, MaiorExp):
         MaiorExp.exp4.accept(self)
         print(' > ', end = '')
