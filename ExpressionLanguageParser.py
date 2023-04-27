@@ -18,11 +18,13 @@
 #       | "(" exp ")" "=" "{" stms "}" "(" cases ")"
 #       | "(" exp ")" "=" "{" stms "}"
 #       | "(" exp ")" "=" "{" stms "}" "(" cases ")"
+#
 # call → id ( params )
 # exp → exp + exp |exp - exp | exp * exp |exp / exp | exp ^ exp | call | assign | num | id
 # call → id (params) | id ( )
 # params → exp, params | exp
 # assign → id = exp
+
 
 import ply.yacc as yacc
 import ply.lex as lex
