@@ -42,8 +42,10 @@ def p_funcdecl(p):
     pass
 
 def p_signature(p):
-    '''signature : ID ID LPAREN sigparams RPAREN
-                 | ID ID LPAREN RPAREN'''
+    '''signature : DEF ID LPAREN sigparams RPAREN
+                 | DEF ID LPAREN RPAREN
+                 | DEF ID LPAREN sigparams RPAREN SEQUENCIAL
+                 | DEF ID LPAREN RPAREN SEQUENCIAL'''
     pass
 
 def p_sigparams(p):
@@ -54,7 +56,8 @@ def p_sigparams(p):
 
 def p_body(p):
     ''' body : LCHAV stms RCHAV
-             | LCHAV RCHAV'''
+             | LCHAV RCHAV
+             | stms'''
     pass
 
 def p_stms(p):
@@ -112,8 +115,24 @@ def p_stm_if(p):
     ''' stm : IF LPAREN exp RPAREN bodyORstm ''' 
     pass
 
+def p_stm_if_seq(p):
+    ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ''' 
+    pass
+
 def p_stm_if_else(p):
     ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE bodyORstm''' 
+    pass
+
+def p_stm_if_else_seq1(p):
+    ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ELSE bodyORstm''' 
+    pass
+
+def p_stm_if_else_seq2(p):
+    ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ELSE SEQUENCIAL bodyORstm''' 
+    pass
+
+def p_stm_if_else_seq3(p):
+    ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE SEQUENCIAL bodyORstm''' 
     pass
 
 def p_exp_assign(p):
@@ -228,4 +247,5 @@ def p_error(p):
     print("Syntax error in input!")
 
 parser = yacc.yacc() 
+print(parser.parse(debug = False))
 

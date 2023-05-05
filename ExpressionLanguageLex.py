@@ -33,6 +33,7 @@ reservadas = {
     'cat' : 'CAT',
     'switch' : 'SWITCH',
     'return' : 'RETURN',
+    'def': 'DEF'
     
 
 }
@@ -71,11 +72,11 @@ t_MODULO = r'%%'
 t_PV =r';'
 
 stack = [0]
-states = (('idstate', 'exclusive'),
-          ('dedstate', 'exclusive'),)
+# states = (('idstate', 'exclusive'),
+#           ('dedstate', 'exclusive'),)
 
 def t_ID(t):
-    r'[a-zA-Z\t][a-zA-Z0-9_\. \t]*'
+    r'[a-zA-Z][a-zA-Z0-9_]*'
     t.type = reservadas.get(t.value, 'ID')
     return t
 
@@ -84,60 +85,60 @@ def t_ID(t):
 def t_breakline(t):
     r'\n+'                                 #reconhece uma ou mais linhas de quebra
     t.lexer.lineno += len(t.value) 
-    t.lexer.begin('idstate')
+    # t.lexer.begin('idstate')
 
-def t_idstate_blankline(t):
-    r'([ \t]+)\n'                           #reconhece uma linha em branco
-    # print('t_idstate_blankline')
-    pass
+# def t_idstate_blankline(t):
+#     r'([ \t]+)\n'                           #reconhece uma linha em branco
+#     # print('t_idstate_blankline')
+#     pass
 
-def t_idstate_linewithcode(t):
-    '([ \t]+) | ([a-zA-Z])'                 #reconhece espaços em branco e tabulações ou uma letra
-    n_spaces = space_counter(t)
-    t.lexer.begin('INITIAL')
-    if n_spaces < stack[-1]:
-        t.lexer.skip(-len(t.value))
-        while n_spaces < stack[-1]:
-            stack.pop()
-            t.type='DEDENT'
-            t.lexer.begin('dedstate')
-        return t
-    elif n_spaces > stack[-1]:
-        stack.append(n_spaces)
-        t.type='IDENT'
-        return t
-    elif n_spaces == 0:
-        t.lexer.skip(-1)
+# def t_idstate_linewithcode(t):
+#     '([ \t]+) | ([a-zA-Z])'                 #reconhece espaços em branco e tabulações ou uma letra
+#     n_spaces = space_counter(t)
+#     t.lexer.begin('INITIAL')
+#     if n_spaces < stack[-1]:
+#         t.lexer.skip(-len(t.value))
+#         while n_spaces < stack[-1]:
+#             stack.pop()
+#             t.type='DEDENT'
+#             t.lexer.begin('dedstate')
+#         return t
+#     elif n_spaces > stack[-1]:
+#         stack.append(n_spaces)
+#         t.type='IDENT'
+#         return t
+#     elif n_spaces == 0:
+#         t.lexer.skip(-1)
 
-def t_dedstate_linewithdedent(t):
-    '([ \t]+) | ([a-zA-Z])'                 #recognizes white spaces and tabs or a letter
-    n_spaces = space_counter(t)
-    if n_spaces < stack[-1]:
-        t.lexer.skip(-len(t.value))
-        while n_spaces < stack[-1]:
-            stack.pop()
-            t.type='DEDENT'
-        t.lexer.begin('dedstate')
-        return t
-    elif n_spaces > stack[-1]:  
-        t.lexer.begin('INITIAL')
-        if n_spaces > stack[-1]:
-            print('Erro de dedentação --->', n_spaces)
-        elif n_spaces == 0:                  # If the element starts with a letter
-            t.lexer.skip(-1)
+# def t_dedstate_linewithdedent(t):
+#     '([ \t]+) | ([a-zA-Z])'                 #recognizes white spaces and tabs or a letter
+#     n_spaces = space_counter(t)
+#     if n_spaces < stack[-1]:
+#         t.lexer.skip(-len(t.value))
+#         while n_spaces < stack[-1]:
+#             stack.pop()
+#             t.type='DEDENT'
+#         t.lexer.begin('dedstate')
+#         return t
+#     elif n_spaces > stack[-1]:  
+#         t.lexer.begin('INITIAL')
+#         if n_spaces > stack[-1]:
+#             print('Erro de dedentação --->', n_spaces)
+#         elif n_spaces == 0:                  # If the element starts with a letter
+#             t.lexer.skip(-1)
 
 def t_error(t):
     print("ERROR in INITIAL state")
     print(t.value)
     t.lexer.skip(1)
 
-def t_idstate_error(t):
-    print("ERROR in idstate state")
-    t.lexer.skip(1)
+# def t_idstate_error(t):
+#     print("ERROR in idstate state")
+#     t.lexer.skip(1)
 
-def t_dedstate_error(t):
-    print("ERROR in dedstate state")
-    t.lexer.skip(1)
+# def t_dedstate_error(t):
+#     print("ERROR in dedstate state")
+#     t.lexer.skip(1)
 
 
 # Expressão regular para identificar comentários
@@ -155,6 +156,9 @@ def t_NUMBER_INT(t):
     t.value = int(t.value)
     return t
 
+def t_branco(t):
+    '[ \t]'
+    pass
 
 def t_newline(t):
     r'\n+'
@@ -174,13 +178,13 @@ lexer = lex.lex()
 programa = """#Comentario
 
 def soma():
-    if True:
-        print(soma)
-return qualquer coisa
+    if (True):
+        print(soma);
+    return qualquer;     
 """
 lexer.input(programa)
 
 
-# for token in lex.lexer:
-#     print('[', token.type, ',', token.value)
-#
+if __name__ == '__main__':
+    for token in lex.lexer:
+        print('[', token.type, ',', token.value, ']')
