@@ -3,10 +3,6 @@ from abc import ABCMeta
 from Visitor import Visitor
 
 
-'''
-Declaracao de funcao
-FuncDecl
-'''
 class FuncDecl(metaclass=ABCMeta):
     @abstractmethod
     def accept(self, visitor):
@@ -20,7 +16,7 @@ class FuncDeclConcrete(FuncDecl):
         return visitor.visitFuncDeclConcrete(self)
 
 '''
-Assinatura de funcao
+Assinatura de função
 Signature
 '''
 class Signature(metaclass=ABCMeta):
@@ -30,13 +26,16 @@ class Signature(metaclass=ABCMeta):
 
 
 class SignatureConcrete(Signature):
-    def __init__(self, id, sigParams):
+    def __init__(self, id, sigParams, is_sequential):
         self.id = id
         self.sigParams = sigParams
+        self.is_sequential = is_sequential
+        
     def accept(self, visitor):
         return visitor.visitSignatureConcrete(self)
+    
 '''
-Parametros de assinatura de funcao
+Parâmetros de assinatura de função
 SigParams
 '''
 
@@ -60,7 +59,7 @@ class CompoundSigParams(SigParams):
         return visitor.visitCompoundSigParams(self)
 
 '''
-Corpo de uma funcao
+Corpo de uma função
 Body
 '''
 
@@ -76,89 +75,46 @@ class BodyConcrete(Body):
     def accept(self, visitor):
         return visitor.visitBodyConcrete(self)
 
-'''
-Comandos
-Stms
-'''
-
-class Stms(metaclass=ABCMeta):
-    @abstractmethod
-    def accept(self, visitor):
-        pass
-
-class SingleStm(Stms):
-    def __init__(self, stm):
-        self.stm = stm
-    def accept(self, visitor):
-        return visitor.visitSingleStm(self)
-
-class CompoundStm(Stms):
-    def __init__(self, stm, stms):
-        self.stm = stm
-        self.stms = stms
-    def accept(self, visitor):
-        return visitor.visitCompoundStm(self)
-
-'''
-Comando
-Stm
-'''
-
-
 
 class Stm(metaclass=ABCMeta):
     @abstractmethod
     def accept(self, visitor):
         pass
 
-# def p_stm_exp(p):
-#     ''' stm :  exp PV ''' 
-#     pass
 
 class StmExp(Stm):
     def __init__(self, exp):
         self.exp = exp
     def accept(self, visitor):
         return visitor.visitStmExp(self)
-    
-# def p_stm_while(p):
-#     ''' stm : WHILE LPAREN exp RPAREN body ''' 
-#     pass
 
 class StmWhile(Stm):
-    def __init__(self, exp, block):
+    def __init__(self, exp, bodyORstm):
         self.exp = exp
-        self.block = block
+        self.bodyORstm = bodyORstm
     def accept(self, visitor):
         return visitor.visitStmWhile(self)
 
-# def p_stm_return(p):
-#     ''' stm : RETURN exp PV ''' 
-#     pass
 class StmReturn(Stm):
     def __init__(self, exp):
         self.exp = exp
     def accept(self, visitor):
         return visitor.visitStmReturn(self)
 
-
-# def p_stm_for(p):
-#     ''' stm : FOR LPAREN ID IN exp RPAREN body ''' 
-#     pass
 class StmFor(Stm):
-    def __init__(self, exp):
+    def __init__(self, id, exp, bodyORstm):
+        self.id = id
         self.exp = exp
+        self.bodyORstm = bodyORstm
     def accept(self, visitor):
-        return visitor.visitStmReturn(self)
-    
-# def p_stm_repeat(p):
-#     ''' stm : REPEAT body WHILE LPAREN exp RPAREN PV ''' 
-#     pass
+        return visitor.visitStmFor(self)
+
 class StmRepeat(Stm):
-    def __init__(self, exp):
+    def __init__(self, bodyORstm, exp):
+        self.bodyORstm = bodyORstm
         self.exp = exp
     def accept(self, visitor):
-        return visitor.visitStmReturn(self)
+        return visitor.visitStmRepeat(self)
 
 # def p_stm_break(p):
 #     ''' stm : BREAK PV ''' 
@@ -195,17 +151,61 @@ class StmSwitchNum(Stm):
     def accept(self, visitor):
         return visitor.visitStmSwitchNum(self)
 
+class Case():
+    def __init__(self, exp1, exp2):
+        self.exp1 = exp1
+        self.exp2 = exp2
 
-# def p_stm_if(p):
-#     ''' stm : IF LPAREN exp RPAREN bodyORstm ''' 
-#     pass
+class CaseNum():
+    def __init__(self, exp):
+        self.exp = exp
 
 
-# def p_stm_if_else(p):
-#     ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE bodyORstm''' 
-#     pass
+class StmIf(Stm):
+    def __init__(self, exp, bodyORstm):
+        self.exp = exp
+        self.bodyORstm = bodyORstm
+    def accept(self, visitor):
+        return visitor.visitStmIf(self)
 
+class StmIfSeq(Stm):
+    def __init__(self, exp, bodyORstm):
+        self.exp = exp
+        self.bodyORstm = bodyORstm
+    def accept(self, visitor):
+        return visitor.visitStmIfSeq(self)
 
+class StmIfElse(Stm):
+    def __init__(self, exp, ifBody, elseBody):
+        self.exp = exp
+        self.ifBody = ifBody
+        self.elseBody = elseBody
+    def accept(self, visitor):
+        return visitor.visitStmIfElse(self)
+
+class StmIfElseSeq1(Stm):
+    def __init__(self, exp, ifBody, elseBody):
+        self.exp = exp
+        self.ifBody = ifBody
+        self.elseBody = elseBody
+    def accept(self, visitor):
+        return visitor.visitStmIfElseSeq1(self)
+
+class StmIfElseSeq2(Stm):
+    def __init__(self, exp, ifBody, elseBody):
+        self.exp = exp
+        self.ifBody = ifBody
+        self.elseBody = elseBody
+    def accept(self, visitor):
+        return visitor.visitStmIfElseSeq2(self)
+
+class StmIfElseSeq3(Stm):
+    def __init__(self, exp, ifBody, elseBody):
+        self.exp = exp
+        self.ifBody = ifBody
+        self.elseBody = elseBody
+    def accept(self, visitor):
+        return visitor.visitStmIfElseSeq3(self)
 '''
 Expressoes
 Exp

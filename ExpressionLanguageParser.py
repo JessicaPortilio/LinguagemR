@@ -29,7 +29,7 @@
 import ply.yacc as yacc
 import ply.lex as lex
 from ExpressionLanguageLex import *
-
+from SintaxeAbstrata import *
 
 def p_program(p):
     '''program : funcdecl
@@ -39,101 +39,133 @@ def p_program(p):
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
-    pass
+    p[0] = FuncDeclConcrete(p[1], p[2])
+
 
 def p_signature(p):
     '''signature : DEF ID LPAREN sigparams RPAREN
                  | DEF ID LPAREN RPAREN
                  | DEF ID LPAREN sigparams RPAREN SEQUENCIAL
                  | DEF ID LPAREN RPAREN SEQUENCIAL'''
-    pass
+    if len(p) == 6:
+        p[0] = SignatureConcrete(p[2], p[4], p[5] == "sequencial")
+    elif len(p) == 5:
+        p[0] = SignatureConcrete(p[2], None, p[4] == "sequencial")
+    else:
+        p[0] = SignatureConcrete(p[2], None, False)
+
 
 def p_sigparams(p):
     '''sigparams : ID ID
                   | ID ID COMMA sigparams
     '''
-    pass
+    if len(p) == 3:
+        p[0] = SingleSigParams(p[1])
+    else:
+        p[0] = CompoundSigParams(p[1], p[3])
+
 
 def p_body(p):
     ''' body : LCHAV stms RCHAV
              | LCHAV RCHAV
              | stms'''
-    pass
+    if len(p) == 4:
+        p[0] = BodyConcrete(p[2])
+    else:
+        p[0] = BodyConcrete([])
+
 
 def p_stms(p):
     ''' stms : stm
             | stm stms'''
-    pass
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1]] + p[2]
+
 def p_bodyORstm(p):
     '''bodyORstm : body 
                 |  stm'''
+    p[0] = p[1]
 
 def p_stm_exp(p):
     ''' stm :  exp PV ''' 
-    pass
+    p[0] = StmExp(p[1])
     
 def p_stm_while(p):
     ''' stm : WHILE LPAREN exp RPAREN body ''' 
-    pass
+    p[0] = StmWhile(p[3], p[5])
 
 def p_stm_return(p):
     ''' stm : RETURN exp PV ''' 
-    pass
+    p[0] = StmReturn(p[2])
 
 def p_stm_for(p):
     ''' stm : FOR LPAREN ID IN exp RPAREN body ''' 
-    pass
+    p[0] = StmFor(p[5])
 
 def p_stm_repeat(p):
     ''' stm : REPEAT body WHILE LPAREN exp RPAREN PV ''' 
-    pass
+    p[0] = StmRepeat(p[5])
 
 def p_stm_break(p):
     ''' stm : BREAK PV ''' 
-    pass
-
+    p[0] = StmBreak()
+    
 def p_stm_next(p):
     ''' stm : NEXT PV ''' 
-    pass
+    p[0] = StmNext()
 
 def p_stm_witch(p):
     ''' stm :  SWITCH LPAREN exp COMMA  cases RPAREN 
             |  SWITCH LPAREN exp COMMA  casesnum RPAREN '''
-    pass
+    if len(p) == 7:
+        p[0] = StmSwitch(p[3], p[5])
+    else:
+        p[0] = StmSwitchNum(p[3], p[4])
 
 def p_cases(p):
     '''cases : exp IGUALAT exp
             | exp IGUALAT exp COMMA cases'''
-    pass
+    if len(p) == 4:
+        p[0] = [Case(p[1], p[3])]
+    else:
+        p[5].insert(0, Case(p[1], p[3]))
+        p[0] = p[5]
 
 def p_cases_num(p):
     '''casesnum : exp
             | exp COMMA cases'''
-    pass
+    if len(p) == 2:
+        p[0] = [CaseNum(p[1])]
+    else:
+        p[3].insert(0, CaseNum(p[1]))
+        p[0] = p[3]
+
 
 def p_stm_if(p):
     ''' stm : IF LPAREN exp RPAREN bodyORstm ''' 
-    pass
+    p[0] = StmIf(p[3], p[5])
 
 def p_stm_if_seq(p):
     ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ''' 
-    pass
+    p[0] = StmIfSeq(p[3], p[6])
 
 def p_stm_if_else(p):
     ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE bodyORstm''' 
-    pass
+    p[0] = StmIfElse(p[3], p[5], p[7])
 
 def p_stm_if_else_seq1(p):
     ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ELSE bodyORstm''' 
-    pass
+    p[0] = StmIfElseSeq1(p[3], p[6], p[8])
 
 def p_stm_if_else_seq2(p):
     ''' stm : IF LPAREN exp RPAREN SEQUENCIAL bodyORstm ELSE SEQUENCIAL bodyORstm''' 
-    pass
+    p[0] = StmIfElseSeq2(p[3], p[6], p[9])
 
 def p_stm_if_else_seq3(p):
     ''' stm : IF LPAREN exp RPAREN bodyORstm ELSE SEQUENCIAL bodyORstm''' 
-    pass
+    p[0] = StmIfElseSeq3(p[3], p[5], p[8])
 
 def p_exp_assign(p):
     ''' exp :    exp IGUAL exp1
