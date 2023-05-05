@@ -344,7 +344,7 @@ class DiferenteExp(Exp):
 #         | exp10'''
 #     pass
 class AndVetorExp(Exp):
-    def init(self, exp9, exp10):
+    def __init__(self, exp9, exp10):
         self.exp9 = exp9
         self.exp10 = exp10
     def accept(self, visitor):
@@ -395,9 +395,8 @@ class OrExp(Exp):
 #     pass
 
 class NotExp(Exp):
-    def __init__(self, exp13, exp14):
-        self.exp13 = exp13
-        self.exp14 = exp14
+    def __init__(self, exp):
+        self.exp = exp
     def accept(self, visitor):
         return visitor.visitNotExp(self)
 
@@ -413,18 +412,8 @@ class XorExp(Exp):
         self.exp15 = exp15
     def accept(self, visitor):
         return visitor.visitXorExp(self)
-    
-# def p_exp15_igual(p):
-#     '''exp15: exp15 IGUAL exp16
-#         |exp 16'''
-#     pass
 
-class IgualExp(Exp):
-    def init(self, exp15, exp16):
-        self.exp15 = exp15
-        self.exp16 = exp16
-        def accept(self, visitor):
-            return visitor.visitIgualExp(self)
+
 
 
 # def p_exp15_call(p):
