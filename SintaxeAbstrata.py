@@ -2,6 +2,24 @@ from abc import abstractmethod
 from abc import ABCMeta
 from Visitor import Visitor
 
+class Program(metaclass=ABCMeta):
+    @abstractmethod
+    def accept(self, visitor):
+        pass
+
+class SimpleProgram(Program):
+    def __init__(self, funcdecl):
+        self.funcdecl = funcdecl
+    def accept(self, visitor):
+        return visitor.visit_simple_program(self)
+
+class CompositeProgram(Program):
+    def __init__(self, funcdecl, program):
+        self.funcdecl = funcdecl
+        self.program = program
+    def accept(self, visitor):
+        return visitor.visit_composite_program(self)
+    
 
 class FuncDecl(metaclass=ABCMeta):
     @abstractmethod
