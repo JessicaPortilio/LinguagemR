@@ -18,18 +18,15 @@ class Visitor(AbstractVisitor):
         
 
     def visitSignatureConcrete(self, signatureConcrete):
-        print (blank(), signatureConcrete.type, ' ', end='', sep='')
         print(signatureConcrete.id, '(', end = '', sep='')
         if (signatureConcrete.sigParams != None):
             signatureConcrete.sigParams.accept(self)
         print(')', end = '')
 
     def visitSingleSigParams(self, singleSigParams):
-        print(singleSigParams.type, ' ', end='', sep='')
         print(singleSigParams.id, end='', sep='')
 
     def visitCompoundSigParams(self, compoundSigParams):
-        print(compoundSigParams.type, ' ', end='', sep='')
         print(compoundSigParams.id, ', ', end='', sep='')
         compoundSigParams.sigParams.accept(self)
 
