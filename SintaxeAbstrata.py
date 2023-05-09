@@ -63,15 +63,17 @@ class SigParams(metaclass=ABCMeta):
         pass
 
 class SingleSigParams(SigParams):
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, id1,id2):
+        self.id1 = id1
+        self.id2 = id2
     def accept(self, visitor):
         return visitor.visitSingleSigParams(self)
 
 
 class CompoundSigParams(SigParams):
-    def __init__(self, id, sigParams):
-        self.id = id
+    def __init__(self, id1,id2, sigParams):
+        self.id1 = id1
+        self.id2 = id2
         self.sigParams = sigParams
     def accept(self, visitor):
         return visitor.visitCompoundSigParams(self)

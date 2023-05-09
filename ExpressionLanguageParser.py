@@ -28,6 +28,7 @@
 
 import ply.yacc as yacc
 import ply.lex as lex
+import Visitor as Vis
 from ExpressionLanguageLex import *
 from SintaxeAbstrata import *
 
@@ -47,14 +48,17 @@ def p_funcdecl(p):
 
 
 def p_signature(p):
-    '''signature : DEF ID LPAREN sigparams RPAREN
+    '''signature : DEF ID LPAREN sigparams RPAREN 
                  | DEF ID LPAREN RPAREN
                  | DEF ID LPAREN sigparams RPAREN SEQUENCIAL
                  | DEF ID LPAREN RPAREN SEQUENCIAL'''
-    if len(p) == 6:
-        p[0] = SignatureConcrete(p[2], p[4], p[5] == "sequencial")
+    print("Chegueiii")
+    if len(p) == 6 and p[4] != ")":
+        p[0] = SignatureConcrete(p[2], p[4], False)
     elif len(p) == 5:
-        p[0] = SignatureConcrete(p[2], None, p[4] == "sequencial")
+        p[0] = SignatureConcrete(p[2], None, False)
+    elif len(p) == 7:
+        p[0] = SignatureConcrete(p[2], p[4],True)
     else:
         p[0] = SignatureConcrete(p[2], None, False)
 
@@ -63,11 +67,13 @@ def p_sigparams(p):
     '''sigparams : ID ID
                   | ID ID COMMA sigparams
     '''
+    print("Cheguei no sigparams")
     if len(p) == 3:
-        p[0] = SingleSigParams(p[1])
+        p[0] = SingleSigParams(p[1],p[2])
+        
     else:
-        p[0] = CompoundSigParams(p[1], p[3])
-
+        p[0] = CompoundSigParams(p[1], p[2], p[4])
+        print(p[1], p[2]," Oiiiiiii")
 
 def p_body(p):
     ''' body : LCHAV stms RCHAV
@@ -356,5 +362,5 @@ def p_error(p):
     print("Syntax error in input!")
 
 parser = yacc.yacc() 
-print(parser.parse(debug = False))
+(parser.parse()).accept(Vis.Visitor())
 

@@ -18,31 +18,18 @@ class Visitor(AbstractVisitor):
     def visitSignatureConcrete(self, signatureConcrete):
         print(signatureConcrete.id, '(', end = '', sep='')
         if (signatureConcrete.sigParams != None):
+            print("Oi",signatureConcrete.sigParams, "$$$")
             signatureConcrete.sigParams.accept(self)
-        print(')', end = '')
+        # print(')', end = '')
 
     def visitSingleSigParams(self, singleSigParams):
-        print(singleSigParams.id, end='', sep='')
+        print(singleSigParams.id1, end='', sep='')
+        print(singleSigParams.id2, end='', sep='')
 
     def visitCompoundSigParams(self, compoundSigParams):
-        print(compoundSigParams.id, ', ', end='', sep='')
+        print(compoundSigParams.id1, ', ', end='', sep='')
+        print(compoundSigParams.id2, ', ', end='', sep='')
         compoundSigParams.sigParams.accept(self)
-
-
-
-# class SimpleProgram(Program):
-#     def __init__(self, funcdecl):
-#         self.funcdecl = funcdecl
-#     def accept(self, visitor):
-#         return visitor.visit_simple_program(self)
-
-# class CompositeProgram(Program):
-#     def __init__(self, funcdecl, program):
-#         self.funcdecl = funcdecl
-#         self.program = program
-#     def accept(self, visitor):
-#         return visitor.visit_composite_program(self)
-
 
     def visit_simple_program(self, SimpleProgram):
         SimpleProgram.funcdecl.accept(self)
