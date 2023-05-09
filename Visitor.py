@@ -1,5 +1,3 @@
-
-# Fiquei em duvida em como implementar as declarações dos tipos de variaveis: tipo Int, Float que tá no final da sintaxe abstrata.
 from AbstractVisitor import AbstractVisitor
 # global tab
 tab = 0
@@ -29,6 +27,29 @@ class Visitor(AbstractVisitor):
     def visitCompoundSigParams(self, compoundSigParams):
         print(compoundSigParams.id, ', ', end='', sep='')
         compoundSigParams.sigParams.accept(self)
+
+
+
+# class SimpleProgram(Program):
+#     def __init__(self, funcdecl):
+#         self.funcdecl = funcdecl
+#     def accept(self, visitor):
+#         return visitor.visit_simple_program(self)
+
+# class CompositeProgram(Program):
+#     def __init__(self, funcdecl, program):
+#         self.funcdecl = funcdecl
+#         self.program = program
+#     def accept(self, visitor):
+#         return visitor.visit_composite_program(self)
+
+
+    def visit_simple_program(self, SimpleProgram):
+        SimpleProgram.funcdecl.accept(self)
+
+    def visit_composite_program(self, CompositeProgram):
+        CompositeProgram.funcdecl.accept(self)
+        CompositeProgram.program.accept(self)
 
     def visitBodyConcrete(self, bodyConcrete):
         global tab
