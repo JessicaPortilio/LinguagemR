@@ -35,7 +35,11 @@ def p_program(p):
     '''program : funcdecl
                 | funcdecl program
                 '''
-    pass
+    if len(p) == 2:
+        p[0] = SimpleProgram(p[1])
+    else:
+        p[0] = CompositeProgram(p[1], p[2])
+       
 
 def p_funcdecl(p):
     '''funcdecl : signature body'''
