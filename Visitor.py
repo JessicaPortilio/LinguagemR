@@ -70,6 +70,8 @@ class Visitor(AbstractVisitor):
         stmReturn.exp.accept(self)
         print (';')
 
+    # Definir todos os ifs 
+
     def visitAssignExp(self, assignExp):
         # print("visitAssignExp")
         assignExp.exp1.accept(self)

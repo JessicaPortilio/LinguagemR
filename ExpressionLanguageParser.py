@@ -73,25 +73,27 @@ def p_sigparams(p):
         
     else:
         p[0] = CompoundSigParams(p[1], p[2], p[4])
-        print(p[1], p[2]," Oiiiiiii")
+        print(p[1], p[2],)
 
 def p_body(p):
     ''' body : LCHAV stms RCHAV
              | LCHAV RCHAV
              | stms'''
-    if len(p) == 4:
+    if len(p) == 4 :
         p[0] = BodyConcrete(p[2])
+    elif len(p) == 2:
+        p[0] = BodyConcrete(p[1])
     else:
-        p[0] = BodyConcrete([])
+        p[0] = BodyConcrete(None)
 
 
 def p_stms(p):
     ''' stms : stm
             | stm stms'''
     if len(p) == 2:
-        p[0] = [p[1]]
+        p[0] = SingleStm(p[1])
     else:
-        p[0] = [p[1]] + p[2]
+        p[0] = CompoundStm(p[1],p[2])
 
 def p_bodyORstm(p):
     '''bodyORstm : body 
@@ -138,7 +140,7 @@ def p_cases(p):
     '''cases : exp IGUALAT exp
             | exp IGUALAT exp COMMA cases'''
     if len(p) == 4:
-        p[0] = [Case(p[1], p[3])]
+        p[0] = Case(p[1], p[3])
     else:
         p[5].insert(0, Case(p[1], p[3]))
         p[0] = p[5]
@@ -147,7 +149,7 @@ def p_cases_num(p):
     '''casesnum : exp
             | exp COMMA cases'''
     if len(p) == 2:
-        p[0] = [CaseNum(p[1])]
+        p[0] = CaseNum(p[1])
     else:
         p[3].insert(0, CaseNum(p[1]))
         p[0] = p[3]

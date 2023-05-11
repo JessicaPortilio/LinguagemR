@@ -522,3 +522,19 @@ class SingleParam(Params):
         self.exp = exp
     def accept(self, visitor):
         return visitor.visitSingleParam(self)
+
+class Stms(metaclass=ABCMeta):
+    @abstractmethod
+    def accept(self, visitor):
+     pass 
+class SingleStm(Stms):
+    def __init__(self,stm):
+        self.stm=stm
+    def accept(self, visitor):
+        return visitor.visitSingleStm(self)
+class CompoundStm(Stms):
+    def __init__(self,stm,stms):
+        self.stm=stm
+        self.stms=stms
+    def accept(self, visitor):
+        return visitor.visitCompoundStm(self)
