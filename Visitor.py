@@ -70,6 +70,39 @@ class Visitor(AbstractVisitor):
         stmReturn.exp.accept(self)
         print (';')
 
+    def visitStmIf(self, StmIf):
+        print (blank(), 'while (', end='', sep='')
+        StmIf.exp.accept(self)
+        StmIf.bodyORstm.accept(self)
+    
+    def visitStmIfSeq(self, StmIfSeq):
+        print (blank(), 'while (', end='', sep='')
+        StmIfSeq.exp.accept(self)
+        StmIfSeq.bodyORstm.accept(self)
+    
+    def visitStmIfElse(self, StmIfElse):
+        print (blank(), 'while (', end='', sep='')
+        StmIfElse.exp.accept(self)
+        StmIfElse.ifBody.accept(self)
+        StmIfElse.elseBody.accept(self)
+    
+    def visitStmIfElseSeq1(self, StmIfElseSeq1):
+        print (blank(), 'while (', end='', sep='')
+        StmIfElseSeq1.exp.accept(self)
+        StmIfElseSeq1.ifBody.accept(self)
+        StmIfElseSeq1.elseBody.accept(self)
+
+    def visitStmIfElseSeq2(self, StmIfElseSeq2):
+        print (blank(), 'while (', end='', sep='')
+        StmIfElseSeq2.exp.accept(self)
+        StmIfElseSeq2.ifBody.accept(self)
+        StmIfElseSeq2.elseBody.accept(self)
+
+    def visitStmIfElseSeq3(self, StmIfElseSeq3):
+        print (blank(), 'while (', end='', sep='')
+        StmIfElseSeq3.exp.accept(self)
+        StmIfElseSeq3.ifBody.accept(self)
+        StmIfElseSeq3.elseBody.accept(self)
     # Definir todos os ifs 
 
     def visitAssignExp(self, assignExp):
